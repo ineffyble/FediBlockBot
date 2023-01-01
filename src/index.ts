@@ -11,11 +11,12 @@ const stream = await masto.v1.stream.streamUser();
 
 // Subscribe to updates
 stream.on('update', async (status) => {
-  if (status.visibility !== 'public') {
+  const target = status.reblog ? status.reblog : status;
+  if (target.visibility !== 'public') {
     return;
   }
-  if (status.tags.find(s => s.name.toLowerCase() === 'fediblock')) {
-    await masto.v1.statuses.reblog(status.id);
+  if (target.tags.find(s => s.name.toLowerCase() === 'fediblock')) {
+    await masto.v1.statuses.reblog(target.id);
   }
 });
   
