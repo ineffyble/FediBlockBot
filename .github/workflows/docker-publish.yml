@@ -1,0 +1,23 @@
+name: Docker Publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build . --file Dockerfile --tag fediblockbot
+
+      - name: Log into GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login https://ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push image to GitHub Container Registry
+        run: |
+          docker tag fediblockbot:latest ghcr.io/${{ github.repository_owner }}/fediblockbot:latest
+          docker push ghcr.io/${{ github.repository_owner }}/fediblockbot:latest
