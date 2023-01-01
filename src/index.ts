@@ -14,7 +14,7 @@ stream.on('update', async (status) => {
   if (status.visibility !== 'public') {
     return;
   }
-  if (status.tags.find(s => s.name.toLowerCase() === 'cheese')) {
+  if (status.tags.find(s => s.name.toLowerCase() === 'fediblock')) {
     await masto.v1.statuses.reblog(status.id);
   }
 });
